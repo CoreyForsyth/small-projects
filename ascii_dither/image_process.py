@@ -6,8 +6,8 @@ import getopt, sys
 from functions import *
 
 def usage():
-    print("Usage: " + sys.argv[0] + " [options] <file>")
-    print("""Applys Floyd-Steinberg dither algorithm to input image, saves as image/ascii
+    print("\nUsage: " + sys.argv[0] + " [options] <file>\n")
+    print("""Applys Floyd-Steinberg dither algorithm to input image, saves as image/ascii\n
 Options:
 -i, --image             saves output as bmp image
 -a, --ascii             saves output as text file
@@ -23,7 +23,7 @@ Options:
 -h, --help              display this help and exit
 
 example usage:""")
-    print(sys.argv[0] + " -ia -w 100 -s 8 -m dither cat.jpg")
+    print(sys.argv[0] + " -ia -w 100 -s 8 -m dither cat.jpg\n")
 
 # Global variables
 if len(sys.argv) < 2:
