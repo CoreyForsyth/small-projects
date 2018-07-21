@@ -5,7 +5,25 @@ import numpy as np
 import getopt, sys
 from functions import *
 
- 
+def usage():
+    print("Usage: " + sys.argv[0] + " [options] <file>")
+    print("""Applys Floyd-Steinberg dither algorithm to input image, saves as image/ascii
+Options:
+-i, --image             saves output as bmp image
+-a, --ascii             saves output as text file
+-m, --method <arg>      method to use to decrease
+                          greyscale palette
+                          options: dither, simple
+-w, --width <arg>       width of the text/image output
+                          between 50 and 200
+-s, --shades <arg>      amount of shades to use when 
+                          decreasing palette
+                          2-255
+-o, --output <arg>      prepend arg to output file names
+-h, --help              display this help and exit
+
+example usage:""")
+    print(sys.argv[0] + " -ia -w 100 -s 8 -m dither cat.jpg")
 
 # Global variables
 if len(sys.argv) < 2:
@@ -15,18 +33,18 @@ input_location = sys.argv[1]
 output_name = ""
 acceptable_methods = ('dither', 'simple')
 character_set = ('%', '#', '*', '=', '-', ':', '.', ' ')
-output_width = 100
+width = 100
 shades = 7
-save_ascii = False
-save_image = False
+save_ascii = True
+save_image = True
 method = 'simple'
 
 # Process arguments
 if(len(sys.argv) < 2):
     usage()
     exit(2)
-arg_list = sys.argv[2:]
-unixOptions = "hm:iaw:s:o:"  
+arg_list = sys.argv[1:]
+unixOptions = "hm:iaw:s:o:"
 gnuOptions = ["help", "method=", "image", "ascii", "width=", "shades=", "output="]
 try:  
     arguments, values = getopt.getopt(arg_list, unixOptions, gnuOptions)
@@ -53,6 +71,7 @@ for currentArgument, currentValue in arguments:
         output_name = currentValue
 
 # Begin processing
+input_location = sys.argv[len(sys.argv) - 1]
 im = Image.open(input_location)
 im = resize(im, float(width)/float(im.size[0]))
 as_pixels = np.asarray(im, dtype=np.uint8)
