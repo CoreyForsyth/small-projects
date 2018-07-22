@@ -56,14 +56,20 @@ def save_black_and_white_image(image, output_name):
     outIm = Image.fromarray(image, 'L')
     outIm.save(output_name + ".png", 'PNG', quality=100)
 
-def save_as_ascii(image, palette_width, shades, character_set, output_name):
+def save_as_ascii(image, palette_width, shades, character_set, output_name, negative):
     file = open(output_name + ".txt", "w+")
-    multiplier = len(character_set) / shades
+    multiplier = int(len(character_set) / shades)
+    charset_length = len(character_set) - 1
     for i in range(0, image.shape[0]):
         for j in range(0, image.shape[1]):
             index = (image[i][j] + palette_width/2)  / palette_width
-            index *=multiplier
-            file.write(character_set[index])
+            index = int(multiplier * index)
+            if negative:
+                file.write(character_set[charset_length - index])
+                print(index)
+            else:
+                file.write(character_set[index])
+
         file.write('\n')
     file.close()
     return

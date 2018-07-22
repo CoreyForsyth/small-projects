@@ -20,6 +20,9 @@ Options:
                           decreasing palette
                           2-255
 -o, --output <arg>      prepend arg to output file names
+-n, --negative          output ascii will be negative
+-c, --charset <arg>     character set for ascii creation
+                          used from file <arg>
 -h, --help              display this help and exit
 
 example usage:""")
@@ -38,14 +41,15 @@ shades = 7
 save_ascii = True
 save_image = True
 method = 'simple'
+negative = False
 
 # Process arguments
 if(len(sys.argv) < 2):
     usage()
     exit(2)
 arg_list = sys.argv[1:]
-unixOptions = "hm:iaw:s:o:"
-gnuOptions = ["help", "method=", "image", "ascii", "width=", "shades=", "output="]
+unixOptions = "hm:iaw:s:o:nc:"
+gnuOptions = ["help", "method=", "image", "ascii", "width=", "shades=", "output=", "negative", "charset"]
 try:  
     arguments, values = getopt.getopt(arg_list, unixOptions, gnuOptions)
 except getopt.error as err:
@@ -60,7 +64,7 @@ for currentArgument, currentValue in arguments:
         if currentValue in acceptable_methods:
             method = currentValue
     elif currentArgument in ("-w", "--width"):
-        width = currentValue if int(currentValue) <= 200 and int(currentValue > 50) else 100
+        width = currentValue if int(currentValue) <= 200 and int(currentValue) >= 50 else 100
     elif currentArgument in ("-i", "--image"):
         save_image = True
     elif currentArgument in ("-a", "--ascii"):
@@ -69,6 +73,12 @@ for currentArgument, currentValue in arguments:
         shades = int(currentValue) - 1
     elif currentArgument in ("-o", "--output"):
         output_name = currentValue
+    elif currentArgument in ("-n", "--negative"):
+        negative = True
+    elif currentArgument in ("-c", "--charset"):
+        with open(currentValue) as f:
+            content = f.read()
+        character_set = list(content)
 
 # Begin processing
 input_location = sys.argv[len(sys.argv) - 1]
@@ -84,6 +94,6 @@ output_file_name = method + '_' + str(width) + 'w_' + str(shades + 1) + 's'
 if output_name != "":
     output_file_name = output_name + '_' + output_file_name
 if save_ascii:
-    save_as_ascii(bw_image, 255 / shades, shades + 1, character_set, output_file_name)
+    save_as_ascii(bw_image, 255 / shades, shades + 1, character_set, output_file_name, negative)
 if save_image:
     save_black_and_white_image(bw_image, output_file_name)
