@@ -26,7 +26,10 @@ Options:
 -h, --help              display this help and exit
 
 example usage:""")
-    print("python " + sys.argv[0] + " -ia -w 100 -s 8 -m dither cat.jpg\n")
+    print("python " + sys.argv[0] + " -ia -w 100 -s 8 -m dither cat.jpg")
+    print("Save an image and ascii 100 wide with 8 shades using dither\n")
+    print("python " + sys.argv[0] + " -ia -c example_ascii_shades.txt cat.jpg")
+    print("Save an image and ascii using the custom charset in example_ascii_shades.txt\n")
 
 # Global variables
 if len(sys.argv) < 2:
